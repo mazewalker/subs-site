@@ -72,10 +72,16 @@ th{color:var(--mut);font-weight:600}
 .alx-wave canvas{width:100%;height:100%;display:block}
 .alx-sub{margin-top:18px;min-height:56px;background:#0d1420;border:1px solid #1f2c3d;border-radius:12px;padding:14px 18px;font-size:18px;line-height:1.55;color:var(--ink)}
 .alx-sub.idle{color:#5b7089;font-size:15px}
-.alx-ctrl{display:flex;align-items:center;gap:16px;margin-top:18px;flex-wrap:wrap}
-.alx-time{color:var(--mut);font-size:14px;font-variant-numeric:tabular-nums;min-width:92px}
-.alx-play{background:var(--acc);border:0;color:#04241a;font:700 15px/1 system-ui;padding:12px 24px;border-radius:10px;cursor:pointer}
-.alx-play.ghost{background:transparent;color:var(--ink);border:1px solid #2a3a4e}
+/* progress bar */
+.alx-pr{margin-top:16px;height:6px;background:#0d1420;border-radius:999px;overflow:hidden}
+.alx-pr i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),#67e8c1);border-radius:999px;transition:width .12s linear}
+/* control bar — mirrors main-site .lx-bar: title left · Stop right */
+.alx-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:16px}
+.alx-t{font-size:15px;color:var(--mut);display:flex;align-items:baseline;gap:10px;min-width:0}
+.alx-t b{color:var(--ink);font-size:16px}
+.alx-lg{color:var(--acc);font-weight:700;font-size:12.5px;border:1px solid #2a3a4e;border-radius:6px;padding:2px 8px}
+.alx-stop{background:var(--acc);border:0;color:#04241a;font:700 15px/1 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:13px 26px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.alx-stop:hover{background:#47e0b3}
 @media(max-width:640px){.btn.ghost{margin:12px 0 0}}
 </style>
 </head>
@@ -209,10 +215,10 @@ curl https://subs.upscalemultimedia.com/v1/transcribe \
     </div>
     <div class="alx-wave"><canvas id="alx_wave"></canvas></div>
     <div class="alx-sub idle" id="alx_sub">Subtitles appear here as the sample plays…</div>
-    <div class="alx-ctrl">
-      <button class="alx-play" id="alx_play">Pause</button>
-      <span class="eq" id="alx_eq2"><i></i><i></i><i></i><i></i><i></i></span>
-      <span class="alx-time" id="alx_time">0:00.0 / 0:00.0</span>
+    <div class="alx-pr"><i id="alx_pr"></i></div>
+    <div class="alx-bar">
+      <span class="alx-t"><b id="alx_t">Sample</b> <span class="alx-lg" id="alx_lang">HU</span></span>
+      <button class="alx-stop" id="alx_stop">Stop</button>
     </div>
   </div>
 </div>
@@ -280,10 +286,11 @@ function setSub(text){
   if(text){e.classList.remove("idle");if(e.textContent!==text)e.textContent=text}
 }
 function loop(){
-  var t=av?av.currentTime:0, lines=curCap;
-  var d=av?av.duration:0;
-  document.getElementById("alx_time").textContent=fmtT(t)+" / "+(d?fmtT(d):"—");
-  var txt=pick(lines,t);
+  var t=(av&&(isFinite(av.currentTime)&&av.currentTime>=0))?av.currentTime:0;
+  var d=(av&&(isFinite(av.duration)&&av.duration>0))?av.duration:0;
+  var pr=document.getElementById("alx_pr");
+  if(pr)pr.style.width=(d?Math.min(100,(t/d)*100):0)+"%";
+  var txt=pick(curCap,t);
   if(txt)setSub(txt);
   var playing=av&&!av.paused;
   drawAlyx(playing);
@@ -293,6 +300,7 @@ function openLx(key,src){
   var s=SUB_SAMPLES[key];curCap=s.lines;
   document.getElementById("alx_t").textContent=s.label;
   document.getElementById("alx_lang").textContent=(s.lang||"").toUpperCase();
+  var pr=document.getElementById("alx_pr");if(pr)pr.style.width="0%";
   var alx=document.getElementById("alx");alx.classList.add("open");
   drawWave(document.getElementById("alx_wave"),key,0);
   av=av||new Audio();
@@ -317,10 +325,7 @@ document.querySelectorAll(".sample[data-key]").forEach(function(el){
   el.addEventListener("click",fire);
   el.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();fire()}});
 });
-document.getElementById("alx_play").addEventListener("click",function(){
-  if(!av)return;
-  if(av.paused){actx.resume();av.play()}else{av.pause()}
-});
+document.getElementById("alx_stop").addEventListener("click",function(){ closeLx(); });
 document.getElementById("alc").addEventListener("click",closeLx);
 alx.addEventListener("click",function(e){if(e.target===alx)closeLx()});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&alx.classList.contains("open"))closeLx()});
