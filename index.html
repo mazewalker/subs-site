@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Upscale Audio — AI Speech-to-Text: Transcription &amp; Subtitles, In-EU</title>
+<meta name="description" content="AI transcription and subtitle generation for EU businesses: 30+ languages, Hungarian included. API + upload, SRT/VTT/JSON output. Processed on private GPU hardware in the EU — your recordings never touch a US cloud.">
+<style>
+:root{--bg:#0b0f14;--card:#121924;--ink:#e8eef6;--mut:#93a4b8;--acc:#35d0a5;--acc2:#5aa9ff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+header{padding:112px 0 52px;text-align:center}
+h1{font-size:clamp(30px,5vw,52px);line-height:1.15;letter-spacing:-.5px}
+h1 em{font-style:normal;color:var(--acc)}
+.sub{color:var(--mut);max-width:640px;margin:18px auto 0;font-size:18px}
+.badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.badge{border:1px solid #2a3a4e;border-radius:999px;padding:7px 16px;font-size:14px;color:var(--mut)}
+.badge b{color:var(--acc)}
+section{padding:56px 0}
+h2{font-size:28px;margin-bottom:14px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid #1f2c3d;border-radius:14px;padding:22px}
+.card h3{font-size:17px;margin-bottom:6px}
+.card p{color:var(--mut);font-size:14.5px}
+.rec{background:linear-gradient(180deg,#13202b,var(--card))}
+.rec .tag{display:inline-block;background:var(--acc);color:#04241a;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;margin-bottom:8px}
+details{background:var(--card);border:1px solid #1f2c3d;border-radius:12px;padding:16px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}
+details p{color:var(--mut);margin-top:8px;font-size:14.5px}
+.cta{text-align:center}
+.btn{display:inline-block;background:var(--acc);color:#04241a;font-weight:700;padding:16px 38px;border-radius:12px;text-decoration:none;font-size:17px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid #2a3a4e;margin-left:12px}
+footer{padding:40px 0;text-align:center;color:var(--mut);font-size:14px}
+.how{counter-reset:step;list-style:none}
+.how li{position:relative;padding:14px 0 14px 54px;color:var(--mut)}
+.how li:before{counter-increment:step;content:counter(step);position:absolute;left:0;top:10px;width:34px;height:34px;border-radius:50%;background:#13202b;border:1px solid #2a3a4e;color:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:700}
+.how li b{color:var(--ink)}
+pre{background:#0d1420;border:1px solid #1f2c3d;border-radius:12px;padding:18px 20px;overflow-x:auto;font-size:13.5px;line-height:1.6;color:#c9d6e4;margin-top:14px}
+pre .c{color:#5b7089}
+.price{font-size:22px;font-weight:700;color:var(--acc)}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid #1f2c3d;font-size:14.5px}
+th{color:var(--mut);font-weight:600}
+@media(max-width:640px){.btn.ghost{margin:12px 0 0}}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <h1>Your recordings, <em>transcribed</em>.<br>Fast. Private. In the EU.</h1>
+  <p class="sub">Meetings, lectures, interviews, calls — get accurate text and subtitles back in minutes: 30+ languages including Hungarian. Plain API or simple upload. Processed on private GPU hardware in the EU: your recordings never touch a US cloud.</p>
+  <div class="badges">
+    <span class="badge"><b>30+</b> languages incl. Hungarian</span>
+    <span class="badge"><b>fast</b> GPU transcription</span>
+    <span class="badge"><b>SRT · VTT · JSON</b> outputs</span>
+    <span class="badge">🇪🇺 <b>EU</b> private processing</span>
+  </div>
+</header>
+
+<div class="wrap">
+<section>
+  <h2>Why teams switch</h2>
+  <div class="cols">
+    <div class="card">
+      <h3>Data stays in the EU</h3>
+      <p>Your audio is processed on our own GPU hardware in the EU — no US cloud, no third-party API, no training on your files. GDPR-friendly from the wire up.</p>
+    </div>
+    <div class="card">
+      <h3>Hungarian, properly</h3>
+      <p>Hungarian speech is one of the hardest languages for mainstream ASR. We run models tuned for slavic-adjacent and HU speech — names, numbers and HU grammar come out right.</p>
+    </div>
+    <div class="card">
+      <h3>Predictably priced</h3>
+      <p>Pay per audio-minute at a flat rate. No per-seat licenses, no "contact sales" surprises, no data egress games.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <ol class="how">
+    <li><b>Send audio.</b> MP3, M4A, WAV, FLAC, MP4, MOV, OGG — upload via the API or a simple link. Up to 2 GB per file.</li>
+    <li><b>Transcription runs.</b> Our GPU pipeline transcribes with word-level timestamps and speaker-friendly punctuation, at many times faster than realtime.</li>
+    <li><b>Get text + subtitles.</b> Plain text, SRT/VTT subtitle files, or structured JSON with timestamps — via callback URL or download link.</li>
+    <li><b>Source deleted.</b> By default your audio is deleted after delivery. Longer retention on request.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>For developers</h2>
+  <p style="color:var(--mut);font-size:15px">One POST to upload, one GET for the result. API keys are free to create during the launch window.</p>
+<pre><span class="c"># 1. upload — POST /v1/transcribe</span>
+curl https://subs.upscalemultimedia.com/v1/transcribe \
+  -H "Authorization: Bearer $API_KEY" \
+  -F "file=@meeting.mp3" \
+  -F "lang=hu" \
+  -F "format=srt,json"
+
+<span class="c"># 2. result — GET /v1/jobs/{id}</span>
+{"status":"done","text":"…","srt_url":"https://…/out.srt",
+ "duration_sec":1834,"lang":"hu","words":[…]}</pre>
+</section>
+
+<section>
+  <h2>Pricing — per audio-minute, flat</h2>
+  <div class="cols">
+    <div class="card">
+      <h3>Web upload</h3>
+      <div class="price">€0.07 / min</div>
+      <p>No API key needed · text + SRT/VTT · best for one-off recordings · 14-day link expiry</p>
+    </div>
+    <div class="card rec">
+      <span class="tag">MOST POPULAR</span>
+      <h3>API access</h3>
+      <div class="price">€0.05 / min</div>
+      <p>API key · JSON + SRT/VTT · word timestamps · webhooks · 10h free credit to start</p>
+    </div>
+    <div class="card">
+      <h3>High volume</h3>
+      <div class="price">Custom</div>
+      <p>&gt; 100h / month · SLA queue priority · DPA on request · dedicated capacity</p>
+    </div>
+  </div>
+  <p style="color:var(--mut);font-size:14px;margin-top:14px">Batch discounts apply automatically over 50h/month · prices in EUR, excl. VAT · EU pricing = EU residency, no US cloud markup.</p>
+</section>
+
+<section>
+  <h2>Questions</h2>
+  <details open><summary>Where is my audio processed?</summary><p>On our own GPUs in the EU. No US cloud, no third-party ASR vendor. After delivery we delete your source file by default, and we never use customer audio for model training.</p></details>
+  <details><summary>Which languages work best?</summary><p>Hungarian, English, German, French, Italian, Spanish, Polish, Czech, Romanian and most major European languages. We support 30+ languages — for anything we're unsure about, send a 30-second test clip first and we'll tell you honestly.</p></details>
+  <details><summary>What do you use under the hood?</summary><p>faster-whisper large-v3 class models (open weights, run locally) with Hungarian-specific decoding and a two-pass timestamp refinement. All inference happens on our hardware.</p></details>
+  <details><summary>Subtitles or just text?</summary><p>Both — SRT and VTT with word-level timing plus plain text, or structured JSON with per-word timestamps if you're building something.</p></details>
+  <details><summary>How fast is "fast"?</summary><p>An hour of audio typically finishes in 2–5 minutes on our GPUs — far below realtime, even for long recordings, during normal load.</p></details>
+</section>
+
+<section class="cta">
+  <h2>Ready when you are</h2>
+  <p class="sub" style="margin-bottom:26px">Send a 30-second test clip — free evaluation before you commit.</p>
+  <a class="btn" href="mailto:hello@upscalemultimedia.com?subject=Transcription%20API%20—%20test%20clip">Request an API key</a>
+  <a class="btn ghost" href="https://upscalemultimedia.com" target="_blank" rel="noopener">Video restoration →</a>
+</section>
+</div>
+
+<footer>© <span id="y"></span> Upscale Multimedia · Private AI transcription in the EU · <a href="https://upscalemultimedia.com" style="color:var(--acc2)">Video restoration</a> · hello@upscalemultimedia.com</footer>
+<script>
+document.getElementById("y").textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
