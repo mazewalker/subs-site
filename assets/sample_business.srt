@@ -1,0 +1,15 @@
+1
+00:00:00,000 --> 00:00:02,700
+Öt perccel a tervezett idő előtt kezdenénk.
+
+2
+00:00:03,680 --> 00:00:09,320
+A negyedik-negyedév árbevétele emelkedett 9%-kal, de a beszerzési költségek is nőtt.
+
+3
+00:00:10,380 --> 00:00:14,360
+A logisztikusról szóló döntést a jövő hétfőig szeretnénk lezárni,
+
+4
+00:00:14,380 --> 00:00:19,080
+és a fejlesztési csapatnak három új pozíciót kell betölteni október derekára.

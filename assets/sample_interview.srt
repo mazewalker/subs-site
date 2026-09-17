@@ -1,0 +1,7 @@
+1
+00:00:00,000 --> 00:00:08,060
+A kutatásunk fő kérdése, hogy a mesterséges intelligencia mennyiben segítette a mezőgazdasági termelők döntéshozatalát a tavalyi asszály alatt.
+
+2
+00:00:08,840 --> 00:00:17,100
+Összesen 350 kérdőívet gyűjtöttünk be 8 megyében, és a válaszok mintegy 70%-ában említik a előrejelző modellek használatát.

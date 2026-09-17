@@ -1,0 +1,11 @@
+1
+00:00:00,000 --> 00:00:04,100
+Köszönöm a türelmet, pontosan két hétre szeretnénk a szállítást.
+
+2
+00:00:05,220 --> 00:00:11,740
+A megrendés száma a 32.440, a termék a kétfeszív tárház, szürke színben.
+
+3
+00:00:12,060 --> 00:00:17,580
+A fizetést utalással szeretném, a számlát kérlek a szokásos címre küldjék.
