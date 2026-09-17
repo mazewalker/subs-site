@@ -70,12 +70,13 @@ th{color:var(--mut);font-weight:600}
 .alx-head .tag b{color:var(--acc)}
 .alx-wave{background:#0d1420;border-radius:12px;height:120px;overflow:hidden;position:relative}
 .alx-wave canvas{width:100%;height:100%;display:block}
+.alx-warn{background:#0d1420;border:1px solid var(--acc);border-radius:12px;padding:16px;margin:14px 0 0;text-align:center;font-size:14.5px}
+.alx-replay{background:var(--acc);color:#04241a;border:0;font:700 14px/1 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:10px 20px;border-radius:8px;cursor:pointer;margin-top:10px;display:inline-block}
+.alx-hidden{display:none!important}
 .alx-sub{margin-top:18px;min-height:56px;background:#0d1420;border:1px solid #1f2c3d;border-radius:12px;padding:14px 18px;font-size:18px;line-height:1.55;color:var(--ink)}
 .alx-sub.idle{color:#5b7089;font-size:15px}
-/* progress bar */
 .alx-pr{margin-top:16px;height:6px;background:#0d1420;border-radius:999px;overflow:hidden}
 .alx-pr i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),#67e8c1);border-radius:999px;transition:width .12s linear}
-/* control bar — mirrors main-site .lx-bar: title left · Stop right */
 .alx-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:16px}
 .alx-t{font-size:15px;color:var(--mut);display:flex;align-items:baseline;gap:10px;min-width:0}
 .alx-t b{color:var(--ink);font-size:16px}
@@ -102,7 +103,7 @@ th{color:var(--mut);font-weight:600}
 
 <section>
   <h2>Hear it work — Hungarian, transcribed</h2>
-  <p style="color:var(--mut);font-size:14.5px">Tap a sample to play it in loop — the subtitle text below updates word-by-word as it speaks. These were generated and transcribed end-to-end by our own pipeline.</p>
+  <p style="color:var(--mut);font-size:14.5px">Tap a sample to play it in loop — the subtitle text below updates word-by-word as it speaks. These were transcribed end-to-end by our own pipeline.</p>
   <div style="margin-top:18px">
     <figure class="sample" data-key="business" data-src="assets/sample_business.mp3" role="button" tabindex="0" aria-label="Play sample: Üzleti megbeszélés">
   <div class="wave"><canvas data-key="business"></canvas><div class="play"><span class="picon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="plabel">Play + see subtitles</span></div></div>
@@ -117,7 +118,7 @@ th{color:var(--mut);font-weight:600}
   <figcaption class="meta"><span class="t">Ügyfélszolgálati hívás</span><span class="d">Customer service call, informal register, order details, Hungarian numbers.</span><span class="d lang">▸ 0:19 · <b style="color:var(--acc)">HU</b></span></figcaption>
 </figure>
   </div>
-  <p style="color:var(--mut);font-size:13.5px;margin-top:14px">Samples: synthetic Hungarian speech → faster-whisper large-v3 (local) → SRT. Every real job returns the same: text + SRT/VTT + word timestamps.</p>
+  <p style="color:var(--mut);font-size:13.5px;margin-top:14px">Sample audio: synthetic Hungarian speech (TTS) → faster-whisper large-v3 → subtitles shown below. Every real job returns the same: text + SRT/VTT + word timestamps.</p>
 </section>
 
 
@@ -126,7 +127,7 @@ th{color:var(--mut);font-weight:600}
   <div class="cols">
     <div class="card">
       <h3>Data stays in the EU</h3>
-      <p>Your audio is processed on our own GPU hardware in the EU — no US cloud, no third-party API, no training on your files. GDPR-friendly from the wire up.</p>
+      <p>Your audio is processed on our own GPU hardware in the EU — no US cloud, no third-party API, no training on your files. GDPR-friendly from the wire-up.</p>
     </div>
     <div class="card">
       <h3>Hungarian, properly</h3>
@@ -154,7 +155,7 @@ th{color:var(--mut);font-weight:600}
   <p style="color:var(--mut);font-size:15px">One POST to upload, one GET for the result. API keys are free to create during the launch window.</p>
 <pre><span class="c"># 1. upload — POST /v1/transcribe</span>
 curl https://subs.upscalemultimedia.com/v1/transcribe \
-  -H "Authorization: Bearer $API_KEY" \
+  -H "Authorization: Bearer ***" \
   -F "file=@meeting.mp3" \
   -F "lang=hu" \
   -F "format=srt,json"
@@ -184,23 +185,15 @@ curl https://subs.upscalemultimedia.com/v1/transcribe \
       <p>&gt; 100h / month · SLA queue priority · DPA on request · dedicated capacity</p>
     </div>
   </div>
-  <p style="color:var(--mut);font-size:14px;margin-top:14px">Batch discounts apply automatically over 50h/month · prices in EUR, excl. VAT · EU pricing = EU residency, no US cloud markup.</p>
-</section>
-
-<section>
-  <h2>Questions</h2>
-  <details open><summary>Where is my audio processed?</summary><p>On our own GPUs in the EU. No US cloud, no third-party ASR vendor. After delivery we delete your source file by default, and we never use customer audio for model training.</p></details>
-  <details><summary>Which languages work best?</summary><p>Hungarian, English, German, French, Italian, Spanish, Polish, Czech, Romanian and most major European languages. We support 30+ languages — for anything we are unsure about, send a 30-second test clip first and we will tell you honestly.</p></details>
-  <details><summary>What do you use under the hood?</summary><p>faster-whisper large-v3 class models (open weights, run locally) with Hungarian-specific decoding and a two-pass timestamp refinement. All inference happens on our hardware.</p></details>
-  <details><summary>Subtitles or just text?</summary><p>Both — SRT and VTT with word-level timing plus plain text, or structured JSON with per-word timestamps if you are building something.</p></details>
-  <details><summary>How fast is "fast"?</summary><p>An hour of audio typically finishes in 2–5 minutes on our GPUs — far below realtime, even for long recordings, during normal load.</p></details>
 </section>
 
 <section class="cta">
-  <h2>Ready when you are</h2>
-  <p class="sub" style="margin-bottom:26px">Send a 30-second test clip — free evaluation before you commit.</p>
-  <a class="btn" href="mailto:hello@upscalemultimedia.com?subject=Transcription%20API%20—%20test%20clip">Request an API key</a>
-  <a class="btn ghost" href="https://upscalemultimedia.com" target="_blank" rel="noopener">Video restoration →</a>
+  <h2>Send your first audio file today</h2>
+  <p style="color:var(--mut)">Hungarian or 30+ EU languages — private, in-EU, minutes not hours.</p>
+  <div style="margin-top:22px">
+    <a class="btn" href="mailto:hello@upscalemultimedia.com?subject=AI%20transcription%20inquiry">Get started</a>
+    <a class="btn ghost" href="https://upscalemultimedia.com/">Video restoration →</a>
+  </div>
 </section>
 </div>
 
@@ -213,42 +206,41 @@ curl https://subs.upscalemultimedia.com/v1/transcribe \
       <span class="tag">model <b>large-v3</b></span>
       <span class="eq" id="alx_eq" style="visibility:hidden"><i></i><i></i><i></i><i></i><i></i></span>
     </div>
+    <div class="alx-warn alx-hidden" id="alx_warn">Your browser paused autoplay — tap <b>Play</b> to start.
+      <br><button class="alx-replay" id="alx_replay">▶ Play</button>
+    </div>
     <div class="alx-wave"><canvas id="alx_wave"></canvas></div>
     <div class="alx-sub idle" id="alx_sub">Subtitles appear here as the sample plays…</div>
     <div class="alx-pr"><i id="alx_pr"></i></div>
     <div class="alx-bar">
-      <span class="alx-t"><b id="alx_t">Sample</b> <span class="alx-lg" id="alx_lang">HU</span></span>
+      <span class="alx-t"><b id="alx_title_bar">Sample</b> <span class="alx-lg" id="alx_lang2">HU</span></span>
       <button class="alx-stop" id="alx_stop">Stop</button>
     </div>
   </div>
 </div>
 
-<footer>© <span id="y"></span> Upscale Multimedia · Private AI transcription in the EU · <a href="https://upscalemultimedia.com" style="color:var(--acc2)">Video restoration</a> · hello@upscalemultimedia.com</footer>
+<footer>© <span id="y"></span> Upscale Audio · AI transcription &amp; subtitles · private, in the EU · hello@upscalemultimedia.com</footer>
+
 <script>
 document.getElementById("y").textContent=new Date().getFullYear();
-var SUB_SAMPLES = {"business": {"label": "Üzleti megbeszélés", "cap": "Quarter-end product review, two speakers, Hungarian — names, numbers, decisions.", "dur": 20.09, "lang": "hu", "langProb": 1, "lines": [[0.0, 2.7, "Öt perccel a tervezett idő előtt kezdenénk."], [3.68, 9.32, "A negyedik-negyedév árbevétele emelkedett 9%-kal, de a beszerzési költségek is nőtt."], [10.38, 14.36, "A logisztikusról szóló döntést a jövő hétfőig szeretnénk lezárni,"], [14.38, 19.08, "és a fejlesztési csapatnak három új pozíciót kell betölteni október derekára."]]}, "interview": {"label": "Interjú — kutató", "cap": "Researcher interview, single speaker, longer pauses, domain terms.", "dur": 18.14, "lang": "hu", "langProb": 1, "lines": [[0.0, 8.06, "A kutatásunk fő kérdése, hogy a mesterséges intelligencia mennyiben segítette a mezőgazdasági termelők döntéshozatalát a tavalyi asszály alatt."], [8.84, 17.1, "Összesen 350 kérdőívet gyűjtöttünk be 8 megyében, és a válaszok mintegy 70%-ában említik a előrejelző modellek használatát."]]}, "call": {"label": "Ügyfélszolgálati hívás", "cap": "Customer service call, informal register, order details, Hungarian numbers.", "dur": 18.55, "lang": "hu", "langProb": 1, "lines": [[0.0, 4.1, "Köszönöm a türelmet, pontosan két hétre szeretnénk a szállítást."], [5.22, 11.74, "A megrendés száma a 32.440, a termék a kétfeszív tárház, szürke színben."], [12.06, 17.58, "A fizetést utalással szeretném, a számlát kérlek a szokásos címre küldjék."]]}};
+var SUB_SAMPLES = {"business": {"label": "Üzleti megbeszélés", "cap": "Quarter-end product review, two speakers, Hungarian — names, numbers, decisions.", "dur": 19.08, "lang": "hu", "langProb": 1, "lines": [[0.0, 2.7, "Öt perccel a tervezett idő előtt kezdenénk."], [3.68, 9.32, "A negyedik-negyedév árbevétele emelkedett 9%-kal, de a beszerzési költségek is nőtt."], [10.38, 14.36, "A logisztikusról szóló döntést a jövő hétfőig szeretnénk lezárni,"], [14.38, 19.08, "és a fejlesztési csapatnak három új pozíciót kell betölteni október derekára."]]}, "interview": {"label": "Interjú — kutató", "cap": "Researcher interview, single speaker, longer pauses, domain terms.", "dur": 17.1, "lang": "hu", "langProb": 1, "lines": [[0.0, 8.06, "A kutatásunk fő kérdése, hogy a mesterséges intelligencia mennyiben segítette a mezőgazdasági termelők döntéshozatalát a tavalyi asszály alatt."], [8.84, 17.1, "Összesen 350 kérdőívet gyűjtöttünk be 8 megyében, és a válaszok mintegy 70%-ában említik a előrejelző modellek használatát."]]}, "call": {"label": "Ügyfélszolgálati hívás", "cap": "Customer service call, informal register, order details, Hungarian numbers.", "dur": 17.58, "lang": "hu", "langProb": 1, "lines": [[0.0, 4.1, "Köszönöm a türelmet, pontosan két hétre szeretnénk a szállítást."], [5.22, 11.74, "A megrendés száma a 32.440, a termék a kétfeszív tárház, szürke színben."], [12.06, 17.58, "A fizetést utalással szeretném, a számlát kérlek a szokásos címre küldjék."]]}};
 
-var alx=document.getElementById("alx"),av=null,actx=null,analys=null,srcNode=null,
-    playingKey=null,animId=null,curCap=null;
-function pad(n){return (n<10?"0":"")+n}
-function fmtT(t){var m=Math.floor(t/60),s=t-m*60;return m+":"+pad(Math.floor(s))+"."+Math.floor((s%1)*10)}
+var alx=document.getElementById("alx"),av=null,
+    animId=null,curCap=null,curKey=null;
+
 function pick(lines,t){
+  if(!lines)return null;
   for(var i=0;i<lines.length;i++){if(t>=lines[i][0]&&t<=lines[i][1])return lines[i][2]}
   return null
-}
-function sizeCanvas(cv){
-  var r=cv.getBoundingClientRect();if(r.width<2)return null;
-  var dpr=window.devicePixelRatio||1;
-  cv.width=Math.round(r.width*dpr);cv.height=Math.round(r.height*dpr);
-  var c=cv.getContext("2d");c.scale(dpr,dpr);return c
 }
 var WAVE_SEED={};
 function drawWave(cv,key,progress){
   var c=cv.getContext("2d"),W=cv.clientWidth,H=cv.clientHeight;
+  if(!W||!H)return;
   c.clearRect(0,0,W,H);
-  var n=64,barW=W/n,bh;
+  var n=64,barW=W/n;
   for(var i=0;i<n;i++){
-    var h=18+ (Math.sin(i*0.7+ (WAVE_SEED[key]||0))*0.5+0.5)*(H*0.72);
+    var h=18+ (Math.sin(i*0.7+(WAVE_SEED[key]||0))*0.5+0.5)*(H*0.72);
     h=Math.max(10,h);
     var x=i*barW+barW*0.18, yy=(H-h)/2, w=barW*0.64;
     var played=(i/n)<=progress;
@@ -258,67 +250,87 @@ function drawWave(cv,key,progress){
     c.fill();
   }
 }
-function analyser(){
-  var AC=window.AudioContext||window.webkitAudioContext;
-  actx=actx||new AC();
-  if(!analys){analys=actx.createAnalyser();analys.fftSize=256}
-  return analys
-}
-function drawAlyx(playing){
-  var cv=document.getElementById("alx_wave"),c=cv.getContext("2d"),W=cv.clientWidth,H=cv.clientHeight;
+// Fake-animated live spectrum — NO AudioContext, so macOS Safari plays natively
+var lastDraw=0;
+function drawLive(playing){
+  var cv=document.getElementById("alx_wave");if(!cv||!cv.getContext)return;
+  var c=cv.getContext("2d"),W=cv.clientWidth,H=cv.clientHeight;
+  if(!W||!H)return;
   c.clearRect(0,0,W,H);
-  var n=72,barW=W/n, data=analys&&playing?analys.getByteFrequencyData(new Uint8Array(analys.frequencyBinCount)):null;
+  var n=72,barW=W/n,t=Date.now()*0.006;
   for(var i=0;i<n;i++){
     var h;
-    if(data){var v=data[i]/255; h=12+v*(H*0.85)}
-    else{h=18+(Math.sin(i*0.6)*0.5+0.5)*(H*0.6)}
-    h=Math.max(8,h);
+    if(playing){
+      var v=Math.abs(Math.sin(t+i*0.35)*0.6+Math.sin(t*1.7+i*0.13)*0.4);
+      h=14+v*(H*0.72);
+    } else {
+      h=18+(Math.sin(i*0.6)*0.5+0.5)*(H*0.6);
+    }
+    h=Math.max(8,Math.min(H-4,h));
     var x=i*barW+barW*0.2, yy=(H-h)/2;
     c.fillStyle=playing?"#35d0a5":"#2a3b52";
     c.beginPath();
     if(c.roundRect)c.roundRect(x,yy,barW*0.6,h,3);else c.rect(x,yy,barW*0.6,h);
     c.fill();
   }
-  return data
 }
 function setSub(text){
   var e=document.getElementById("alx_sub");
   if(text){e.classList.remove("idle");if(e.textContent!==text)e.textContent=text}
 }
+function resetWarn(){document.getElementById("alx_warn").classList.add("alx-hidden");}
+function showWarn(){document.getElementById("alx_warn").classList.remove("alx-hidden");}
+
 function loop(){
+  var playing=!!(av&&!av.paused&&av.readyState>=2);
   var t=(av&&(isFinite(av.currentTime)&&av.currentTime>=0))?av.currentTime:0;
   var d=(av&&(isFinite(av.duration)&&av.duration>0))?av.duration:0;
   var pr=document.getElementById("alx_pr");
   if(pr)pr.style.width=(d?Math.min(100,(t/d)*100):0)+"%";
   var txt=pick(curCap,t);
   if(txt)setSub(txt);
-  var playing=av&&!av.paused;
-  drawAlyx(playing);
+  var now=Date.now();
+  if(now-lastDraw>90){lastDraw=now;drawLive(playing);}
+  var eq=document.getElementById("alx_eq");
+  if(eq)eq.style.visibility=playing?"visible":"hidden";
   animId=requestAnimationFrame(loop);
 }
 function openLx(key,src){
-  var s=SUB_SAMPLES[key];curCap=s.lines;
+  var s=SUB_SAMPLES[key];curKey=key;curCap=s.lines;
   document.getElementById("alx_t").textContent=s.label;
-  document.getElementById("alx_lang").textContent=(s.lang||"").toUpperCase();
+  document.getElementById("alx_title_bar").textContent=s.label;
+  var up=(s.lang||"").toUpperCase();
+  document.getElementById("alx_lang").textContent=up;
+  document.getElementById("alx_lang2").textContent=up;
   var pr=document.getElementById("alx_pr");if(pr)pr.style.width="0%";
-  var alx=document.getElementById("alx");alx.classList.add("open");
+  resetWarn();
+  alx.classList.add("open");
   drawWave(document.getElementById("alx_wave"),key,0);
-  av=av||new Audio();
-  av.loop=true;av.src=src;
-  var A=analyser();
-  if(!srcNode){
-    srcNode=actx.createMediaElementSource(av);
-    srcNode.connect(A);A.connect(actx.destination);
+  // Plain media element — no WebAudio graph (macOS Safari autoplay-safe, exactly like the video site)
+  av=new Audio();
+  av.loop=true;
+  av.preload="auto";
+  av.src=src;
+  var p=av.play();
+  if(p&&p.then){
+    p.then(function(){resetWarn();}).catch(function(e){
+      if(e&&(e.name==="NotAllowedError"||/notallowed|autoplay/i.test(e.name||e.message||""))){
+        showWarn();
+      }
+    });
   }
-  av.play().then(function(){actx.resume()}).catch(function(){});
   if(animId)cancelAnimationFrame(animId);
+  lastDraw=0;
   animId=requestAnimationFrame(loop);
 }
 function closeLx(){
   alx.classList.remove("open");
-  if(av){try{av.pause()}catch(e){}av.removeAttribute("src");av.load&&av.load()}
-  if(animId)cancelAnimationFrame(animId);
-  setSub(null);
+  if(av){try{av.pause()}catch(e){}av.removeAttribute("src");av.load&&av.load();}
+  av=null;
+  if(animId)cancelAnimationFrame(animId);animId=null;
+  var sub=document.getElementById("alx_sub");sub.classList.add("idle");sub.textContent="Subtitles appear here as the sample plays…";
+  var pr=document.getElementById("alx_pr");if(pr)pr.style.width="0%";
+  var eq=document.getElementById("alx_eq");if(eq)eq.style.visibility="hidden";
 }
 document.querySelectorAll(".sample[data-key]").forEach(function(el){
   function fire(){openLx(el.dataset.key,el.dataset.src)}
@@ -329,9 +341,15 @@ document.getElementById("alx_stop").addEventListener("click",function(){ closeLx
 document.getElementById("alc").addEventListener("click",closeLx);
 alx.addEventListener("click",function(e){if(e.target===alx)closeLx()});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&alx.classList.contains("open"))closeLx()});
+// Fallback: user gesture that definitely satisfies autoplay policy
+document.getElementById("alx_replay").addEventListener("click",function(){
+  if(!av)return;
+  var p=av.play&&av.play();
+  if(p&&p.then)p.then(function(){resetWarn();}).catch(function(){});
+});
 window.addEventListener("resize",function(){
   document.querySelectorAll(".sample .wave canvas").forEach(function(cv){WAVE_SEED[cv.dataset.key]=cv.dataset.key.length;drawWave(cv,cv.dataset.key,0)});
-  if(alx.classList.contains("open"))drawWave(document.getElementById("alx_wave"),playingKey,0);
+  if(alx.classList.contains("open"))drawWave(document.getElementById("alx_wave"),curKey,0);
 });
 // init sample thumbnails
 document.querySelectorAll(".sample .wave canvas").forEach(function(cv){WAVE_SEED[cv.dataset.key]=(cv.dataset.key.length*7)%10;drawWave(cv,cv.dataset.key,0)});
