@@ -212,6 +212,7 @@ curl https://subs.upscalemultimedia.com/v1/transcribe \
     <div class="alx-wave"><canvas id="alx_wave"></canvas></div>
     <div class="alx-sub idle" id="alx_sub">Subtitles appear here as the sample plays…</div>
     <div class="alx-pr"><i id="alx_pr"></i></div>
+    <audio id="alx_audio" loop preload="auto" playsinline></audio>
     <div class="alx-bar">
       <span class="alx-t"><b id="alx_title_bar">Sample</b> <span class="alx-lg" id="alx_lang2">HU</span></span>
       <button class="alx-stop" id="alx_stop">Stop</button>
@@ -225,8 +226,16 @@ curl https://subs.upscalemultimedia.com/v1/transcribe \
 document.getElementById("y").textContent=new Date().getFullYear();
 var SUB_SAMPLES = {"business": {"label": "Üzleti megbeszélés", "cap": "Quarter-end product review, two speakers, Hungarian — names, numbers, decisions.", "dur": 19.08, "lang": "hu", "langProb": 1, "lines": [[0.0, 2.7, "Öt perccel a tervezett idő előtt kezdenénk."], [3.68, 9.32, "A negyedik-negyedév árbevétele emelkedett 9%-kal, de a beszerzési költségek is nőtt."], [10.38, 14.36, "A logisztikusról szóló döntést a jövő hétfőig szeretnénk lezárni,"], [14.38, 19.08, "és a fejlesztési csapatnak három új pozíciót kell betölteni október derekára."]]}, "interview": {"label": "Interjú — kutató", "cap": "Researcher interview, single speaker, longer pauses, domain terms.", "dur": 17.1, "lang": "hu", "langProb": 1, "lines": [[0.0, 8.06, "A kutatásunk fő kérdése, hogy a mesterséges intelligencia mennyiben segítette a mezőgazdasági termelők döntéshozatalát a tavalyi asszály alatt."], [8.84, 17.1, "Összesen 350 kérdőívet gyűjtöttünk be 8 megyében, és a válaszok mintegy 70%-ában említik a előrejelző modellek használatát."]]}, "call": {"label": "Ügyfélszolgálati hívás", "cap": "Customer service call, informal register, order details, Hungarian numbers.", "dur": 17.58, "lang": "hu", "langProb": 1, "lines": [[0.0, 4.1, "Köszönöm a türelmet, pontosan két hétre szeretnénk a szállítást."], [5.22, 11.74, "A megrendés száma a 32.440, a termék a kétfeszív tárház, szürke színben."], [12.06, 17.58, "A fizetést utalással szeretném, a számlát kérlek a szokásos címre küldjék."]]}};
 
-var alx=document.getElementById("alx"),av=null,
+var alx=document.getElementById("alx"),
+    avEl=document.getElementById("alx_audio"),
     animId=null,curCap=null,curKey=null;
+// Surface decode/network failures instead of a silent player
+avEl.addEventListener("error",function(){
+  var code=avEl.error?avEl.error.code:"?";
+  var el=document.getElementById("alx_warn");
+  el.classList.remove("alx-hidden");
+  el.innerHTML="Audio element error (code "+code+"). <a href=\""+avEl.getAttribute("src")+"\" style=\"color:var(--acc)\">Download MP3</a> to verify.";
+});
 
 function pick(lines,t){
   if(!lines)return null;
@@ -282,6 +291,7 @@ function resetWarn(){document.getElementById("alx_warn").classList.add("alx-hidd
 function showWarn(){document.getElementById("alx_warn").classList.remove("alx-hidden");}
 
 function loop(){
+  var av=avEl;
   var playing=!!(av&&!av.paused&&av.readyState>=2);
   var t=(av&&(isFinite(av.currentTime)&&av.currentTime>=0))?av.currentTime:0;
   var d=(av&&(isFinite(av.duration)&&av.duration>0))?av.duration:0;
@@ -306,17 +316,16 @@ function openLx(key,src){
   resetWarn();
   alx.classList.add("open");
   drawWave(document.getElementById("alx_wave"),key,0);
-  // Plain media element — no WebAudio graph (macOS Safari autoplay-safe, exactly like the video site)
-  av=new Audio();
-  av.loop=true;
-  av.preload="auto";
-  av.src=src;
-  var p=av.play();
+  // Persistent DOM <audio> (in the page tree) — exactly like the main site's <video>, Safari-safe.
+  // play() is invoked directly in the click handler's call stack so the user gesture is preserved.
+  avEl.loop=true;
+  avEl.preload="auto";
+  if(avEl.getAttribute("src")!==src){avEl.src=src;}
+  var p=avEl.play();
   if(p&&p.then){
     p.then(function(){resetWarn();}).catch(function(e){
-      if(e&&(e.name==="NotAllowedError"||/notallowed|autoplay/i.test(e.name||e.message||""))){
-        showWarn();
-      }
+      showWarn();
+      console.warn("audio play failed:",e&&e.name,e&&e.message);
     });
   }
   if(animId)cancelAnimationFrame(animId);
@@ -325,8 +334,7 @@ function openLx(key,src){
 }
 function closeLx(){
   alx.classList.remove("open");
-  if(av){try{av.pause()}catch(e){}av.removeAttribute("src");av.load&&av.load();}
-  av=null;
+  try{avEl.pause()}catch(e){}
   if(animId)cancelAnimationFrame(animId);animId=null;
   var sub=document.getElementById("alx_sub");sub.classList.add("idle");sub.textContent="Subtitles appear here as the sample plays…";
   var pr=document.getElementById("alx_pr");if(pr)pr.style.width="0%";
@@ -343,9 +351,10 @@ alx.addEventListener("click",function(e){if(e.target===alx)closeLx()});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&alx.classList.contains("open"))closeLx()});
 // Fallback: user gesture that definitely satisfies autoplay policy
 document.getElementById("alx_replay").addEventListener("click",function(){
-  if(!av)return;
-  var p=av.play&&av.play();
-  if(p&&p.then)p.then(function(){resetWarn();}).catch(function(){});
+  var p=avEl.play&&avEl.play();
+  if(p&&p.then)p.then(function(){resetWarn();}).catch(function(){
+    document.getElementById("alx_warn").innerHTML='Could not play — <a href="'+avEl.getAttribute("src")+'" style="color:var(--acc)">download the sample MP3</a> to hear it.';
+  });
 });
 window.addEventListener("resize",function(){
   document.querySelectorAll(".sample .wave canvas").forEach(function(cv){WAVE_SEED[cv.dataset.key]=cv.dataset.key.length;drawWave(cv,cv.dataset.key,0)});
